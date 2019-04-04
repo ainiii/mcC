@@ -8,5 +8,7 @@
     <artifactId>McC</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
+    <build>
+        <sourceDirectory>src/main/java/com/mcc</sourceDirectory>
+    </build>
 </project>
