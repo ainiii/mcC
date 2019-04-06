@@ -2,7 +2,7 @@ package parser;
 
 import ast.AstNode;
 import ast.RootNode;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

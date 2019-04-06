@@ -4,3 +4,6 @@
 *.iml
 .idea/inspectionProfiles
 .idea/uiDesigner.xml
+
+# Build
+/target
