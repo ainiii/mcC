@@ -233,4 +233,8 @@ public enum Opcode {
     Opcode(int hex) {
         this.hex = hex;
     }
+
+    public String toBinaryStr(Opcode opcode) {
+        return Integer.toBinaryString(opcode.hex);
+    }
 }
