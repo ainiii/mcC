@@ -3,7 +3,6 @@ package other;
 import ast.RootNode;
 import ast.AstNode;
 import ast.ValueNode;
-import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import org.jetbrains.annotations.Nullable;
@@ -40,9 +39,8 @@ public class mcCGraph extends JApplet {
         getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
-        mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter);
-        layout.setHorizontal(false);
-        layout.setMoveTree(true);
+        mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter, false);
+        layout.setEdgeRouting(false);
 
         layout.execute(jgxAdapter.getDefaultParent());
     }
@@ -60,13 +58,16 @@ public class mcCGraph extends JApplet {
     }
 
     private void fillGraph() {
+        Vertex root = new Vertex("Root", this.id++);
+        this.directedGraph.addVertex(root);
+
         // preorder (root, left, right)
         for (AstNode node : this.tree.nodes) {
-            this.preorder(node, null);
+            this.preorder(node, null, root);
         }
     }
 
-    private void preorder(AstNode node, @Nullable Vertex parent) {
+    private void preorder(AstNode node, @Nullable Vertex parent, Vertex root) {
         if (node == null) {
             return;
         }
@@ -83,10 +84,12 @@ public class mcCGraph extends JApplet {
 
         if (parent != null) {
             this.directedGraph.addEdge(parent, temp, new Edge());
+        } else {
+            this.directedGraph.addEdge(root, temp, new Edge());
         }
 
-        this.preorder(node.left, temp);
-        this.preorder(node.right, temp);
+        this.preorder(node.left, temp, null);
+        this.preorder(node.right, temp, null);
     }
 
     private Graph<Vertex, Edge> getEmptyGraph() {

@@ -1,8 +1,6 @@
 package parser;
 
-import ast.RootNode;
-import ast.AstNode;
-import ast.ValueNode;
+import ast.*;
 import org.jetbrains.annotations.Nullable;
 import other.mcCSyntax;
 
@@ -44,7 +42,6 @@ public class Parser {
         ParserLib.readWhitespace(stream);
         ParserLib.readComment(stream);
 
-        // error
         if (stream.eof()) {
             return null;
         }
@@ -52,18 +49,20 @@ public class Parser {
         String nextChar = stream.peek();
 
         if (ParserLib.isDigit.test(nextChar)) {
-            return parseMathOperation(stream, null);
+            return parseBinaryOperation(stream, null);
         }
 
-        if (ParserLib.isOperand.test(nextChar)) {
-            //return ParserLib.readUntil(stream, ParserLib.isWhitespace);
+        String nextKeyword = stream.peekKeyword();
+
+        if (ParserLib.isType.test(nextKeyword)) {
+            return parseTypeDeclaration(stream);
         }
 
         return null;
     }
 
     // read left, token -> recur
-    private AstNode parseMathOperation(ParserStream stream, @Nullable AstNode parent) {
+    private AstNode parseBinaryOperation(ParserStream stream, @Nullable AstNode parent) {
         ParserLib.readWhitespace(stream);
         String number = ParserLib.readNumber(stream);
 
@@ -75,31 +74,96 @@ public class Parser {
         ParserLib.readWhitespace(stream);
         String token = ParserLib.readUntil(stream, ParserLib.isOperand);
 
-        if (ParserLib.isOperand.test(token)) {
+        if (!token.equals("")) {
             AstNode astNode = mcCSyntax.getObjectFromField(token);
 
-            if (astNode == null) {
+            if (astNode == null || ParserLib.isInvalidOperator(astNode)) {
                 return null; // error
             }
 
             // first time call
             if (parent == null) {
                 astNode.left = new ValueNode(number);
-                parseMathOperation(stream, astNode);
+                parseBinaryOperation(stream, astNode);
                 return astNode;
             } else { // make place for token
                 parent.right = astNode;
                 astNode.left = new ValueNode(number);
-                parseMathOperation(stream, astNode);
+                parseBinaryOperation(stream, astNode);
             }
         } else {
+            // return node value only
             if (parent == null) {
-                return null; // error
+                return new ValueNode(number);
             }
 
             parent.right = new ValueNode(number);
         }
 
         return null; // not error
+    }
+
+    private AstNode parseTypeDeclaration(ParserStream stream) {
+        String nextKeyword = stream.peekKeyword();
+        stream.skipKeyword();
+        mcCSyntax.Syntax type = mcCSyntax.getEnumFromField(nextKeyword);
+
+        // error, should never happen
+        if (type == null) {
+            return null;
+        }
+
+        ParserLib.readWhitespace(stream);
+        String variableName = stream.peekKeyword();
+        stream.skipKeyword();
+
+        // error, missing variable name
+        if (variableName.equals("")) {
+            return null;
+        }
+
+        // get token, should be ASSIGN
+        ParserLib.readWhitespace(stream);
+        String token = ParserLib.readUntil(stream, ParserLib.isOperand);
+
+        // error
+        if (!token.equals(mcCSyntax.getField(mcCSyntax.Syntax.ASSIGN))) {
+            return null;
+        }
+
+        ParserLib.readWhitespace(stream);
+        AstNode ret;
+
+        switch (type) {
+            case INT:
+                ret = new DeclareIntNode();
+                ret.right = parseBinaryOperation(stream, null);
+                break;
+            case DOUBLE:
+                ret = new DeclareDoubleNode();
+                ret.right = parseBinaryOperation(stream, null);
+                break;
+            case STRING:
+                ret = new DeclareStringNode();
+                ret.right = new ValueNode(ParserLib.readUntilEnd(stream));
+                stream.skipLine();
+                break;
+            case BOOL:
+                ret = new DeclareBoolNode();
+                String varAssign = stream.peekKeyword();
+
+                if (mcCSyntax.isTypeOf(varAssign, mcCSyntax.EnumType.STATE)) {
+                    ret.right = new ValueNode(varAssign);
+                    stream.skipKeyword();
+                } else {
+                    return null; // error, not a type keyword
+                }
+                break;
+            default:
+                return null; // error, should never happen
+        }
+
+        ret.left = new ValueNode(variableName);
+        return ret;
     }
 }

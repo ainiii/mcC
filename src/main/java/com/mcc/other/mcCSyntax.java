@@ -11,6 +11,27 @@ public class mcCSyntax {
         return s.field;
     }
 
+    public static boolean isTypeOf(String str, EnumType type) {
+        Syntax s = getEnumFromField(str);
+
+        if (s == null) {
+            return false;
+        }
+
+        return s.type == type;
+    }
+
+    @Nullable
+    public static Syntax getEnumFromField(String str) {
+        for (Syntax s : Syntax.values()) {
+            if (s.field.equals(str)) {
+                return s;
+            }
+        }
+
+        return null;
+    }
+
     @Nullable
     public static AstNode getObjectFromField(String str) {
         for (Syntax s : Syntax.values()) {
@@ -26,20 +47,30 @@ public class mcCSyntax {
         return null;
     }
 
-    public static List<String> getOperators() {
-        ArrayList<String> operators = new ArrayList<>();
+    public static List<String> getByType(EnumType type) {
+        ArrayList<String> result = new ArrayList<>();
 
         for (Syntax s : Syntax.values()) {
-            if (s.type == EnumType.OPERATOR) {
-                operators.add(s.field);
+            if (s.type == type) {
+                result.add(s.field);
             }
         }
 
-        return operators;
+        return result;
     }
 
     public enum Syntax {
         // store language syntax for parser
+
+        // types
+        INT("int", DeclareIntNode.class, EnumType.TYPE),
+        DOUBLE("double", DeclareDoubleNode.class, EnumType.TYPE),
+        STRING("string", DeclareStringNode.class, EnumType.TYPE),
+        BOOL("bool", DeclareBoolNode.class, EnumType.TYPE),
+
+        // bool states
+        TRUE("true", null, EnumType.STATE),
+        FALSE("false", null, EnumType.STATE),
 
         // operators
         PLUS("+", OperatorPlusNode.class, EnumType.OPERATOR),
@@ -66,7 +97,9 @@ public class mcCSyntax {
         }
     }
 
-    private enum EnumType {
-        OPERATOR
+    public enum EnumType {
+        OPERATOR,
+        TYPE,
+        STATE
     }
 }
