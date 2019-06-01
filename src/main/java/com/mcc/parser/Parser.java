@@ -1,7 +1,7 @@
 package parser;
 
-import ast.AstNode;
 import ast.RootNode;
+import ast.AstNode;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;

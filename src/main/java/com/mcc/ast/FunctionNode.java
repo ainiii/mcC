@@ -1,5 +1,5 @@
 package ast;
 
-public interface FunctionNode extends AstNode {
+public interface FunctionNode {
 
 }

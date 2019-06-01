@@ -1,5 +1,5 @@
 package ast;
 
-public class OperatorGreaterThanNode implements OperatorNode {
+public class OperatorGreaterThanNode extends AstNode implements OperatorNode {
     public OperatorGreaterThanNode() { }
 }

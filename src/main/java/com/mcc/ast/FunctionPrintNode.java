@@ -1,5 +1,5 @@
 package ast;
 
-public class FunctionPrintNode implements FunctionNode {
+public class FunctionPrintNode extends AstNode implements FunctionNode {
     public FunctionPrintNode() { }
 }
