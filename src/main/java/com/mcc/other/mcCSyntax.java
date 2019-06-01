@@ -1,11 +1,31 @@
 package other;
 
 import ast.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class mcCSyntax {
+    public static String getField(mcCSyntax.Syntax s) {
+        return s.field;
+    }
+
+    @Nullable
+    public static AstNode getObjectFromField(String str) {
+        for (Syntax s : Syntax.values()) {
+            if (s.field.equals(str)) {
+                try {
+                    return (AstNode)s.nodeClass.newInstance();
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static List<String> getOperators() {
         ArrayList<String> operators = new ArrayList<>();
 
@@ -30,7 +50,10 @@ public class mcCSyntax {
         GREATHERTHAN(">", OperatorGreaterThanNode.class, EnumType.OPERATOR),
         LESSTHAN("<", OperatorLessThanNode.class, EnumType.OPERATOR),
         ASSIGN("=", OperatorAssignNode.class, EnumType.OPERATOR),
-        EQUAL("==", OperatorEqualNode.class, EnumType.OPERATOR);
+        EQUAL("==", OperatorEqualNode.class, EnumType.OPERATOR),
+
+        // additional
+        COMMENT("#", null, null);
 
         private final String field;
         private final Class nodeClass;

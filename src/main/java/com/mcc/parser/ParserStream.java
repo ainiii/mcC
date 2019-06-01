@@ -24,10 +24,14 @@ public class ParserStream {
     }
 
     public String peek() {
-        return String.valueOf(input.get(line).charAt(pos));
+        return this.eof() ? "" : String.valueOf(input.get(line).charAt(pos));
     }
 
     public boolean eof() {
         return this.input.size() == line;
+    }
+
+    public boolean eol() {
+        return eof() || this.pos == input.get(line).length() - 1;
     }
 }

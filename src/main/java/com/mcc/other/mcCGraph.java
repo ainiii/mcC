@@ -2,7 +2,9 @@ package other;
 
 import ast.RootNode;
 import ast.AstNode;
+import ast.ValueNode;
 import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import org.jetbrains.annotations.Nullable;
 import org.jgrapht.Graph;
@@ -38,11 +40,9 @@ public class mcCGraph extends JApplet {
         getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
-        mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
-        layout.setX0((DEFAULT_SIZE.width / 2.0) - 100);
-        layout.setY0((DEFAULT_SIZE.height / 2.0) - 100);
-        layout.setRadius(100);
-        layout.setMoveCircle(true);
+        mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter);
+        layout.setHorizontal(false);
+        layout.setMoveTree(true);
 
         layout.execute(jgxAdapter.getDefaultParent());
     }
@@ -71,7 +71,14 @@ public class mcCGraph extends JApplet {
             return;
         }
 
-        Vertex temp = new Vertex(node.getClass().getSimpleName(), this.id++);
+        Vertex temp;
+
+        if (node instanceof ValueNode) {
+            temp = new Vertex(((ValueNode)node).value, this.id++);
+        } else {
+            temp = new Vertex(node.getClass().getSimpleName(), this.id++);
+        }
+
         this.directedGraph.addVertex(temp);
 
         if (parent != null) {
