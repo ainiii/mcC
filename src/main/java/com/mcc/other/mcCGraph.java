@@ -1,6 +1,9 @@
-import ast.RootNode;
+package other;
+
 import ast.AstNode;
-import com.mxgraph.layout.mxCircleLayout;
+import ast.RootNode;
+import ast.ValueNode;
+import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import org.jetbrains.annotations.Nullable;
 import org.jgrapht.Graph;
@@ -36,11 +39,8 @@ public class mcCGraph extends JApplet {
         getContentPane().add(component);
         resize(DEFAULT_SIZE);
 
-        mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
-        layout.setX0((DEFAULT_SIZE.width / 2.0) - 100);
-        layout.setY0((DEFAULT_SIZE.height / 2.0) - 100);
-        layout.setRadius(100);
-        layout.setMoveCircle(true);
+        mxCompactTreeLayout layout = new mxCompactTreeLayout(jgxAdapter, false);
+        layout.setEdgeRouting(false);
 
         layout.execute(jgxAdapter.getDefaultParent());
     }
@@ -58,26 +58,38 @@ public class mcCGraph extends JApplet {
     }
 
     private void fillGraph() {
+        Vertex root = new Vertex("Root", this.id++);
+        this.directedGraph.addVertex(root);
+
         // preorder (root, left, right)
         for (AstNode node : this.tree.nodes) {
-            this.preorder(node, null);
+            this.preorder(node, null, root);
         }
     }
 
-    private void preorder(AstNode node, @Nullable Vertex parent) {
+    private void preorder(AstNode node, @Nullable Vertex parent, Vertex root) {
         if (node == null) {
             return;
         }
 
-        Vertex temp = new Vertex(node.getClass().getSimpleName(), this.id++);
+        Vertex temp;
+
+        if (node instanceof ValueNode) {
+            temp = new Vertex(((ValueNode)node).value, this.id++);
+        } else {
+            temp = new Vertex(node.getClass().getSimpleName(), this.id++);
+        }
+
         this.directedGraph.addVertex(temp);
 
         if (parent != null) {
             this.directedGraph.addEdge(parent, temp, new Edge());
+        } else {
+            this.directedGraph.addEdge(root, temp, new Edge());
         }
 
-        this.preorder(node.left, temp);
-        this.preorder(node.right, temp);
+        this.preorder(node.left, temp, null);
+        this.preorder(node.right, temp, null);
     }
 
     private Graph<Vertex, Edge> getEmptyGraph() {

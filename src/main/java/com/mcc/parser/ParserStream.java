@@ -3,31 +3,72 @@ package parser;
 import java.util.List;
 
 public class ParserStream {
-    private List<String> lines;
-    private int pos = 0; // character in string
-    private int index = 0; // line number
+    private List<String> input;
+    private static int pos = 0; // character in string
+    private static int line = 0; // line number
 
     public ParserStream(List<String> lines) {
-        this.lines = lines;
+        this.input = lines;
     }
 
-    public char next() {
-        char ch = lines.get(index).charAt(pos++);
+    public String next() {
+        if (eof()) {
+            return "";
+        }
 
         // next entry
-        if (pos == lines.get(index).length()) {
-            index++;
+        if (pos == input.get(line).length()) {
+            line++;
             pos = 0;
         }
 
-        return ch;
+        return String.valueOf(input.get(line).charAt(pos++));
     }
 
-    public char peek() {
-        return lines.get(index).charAt(pos);
+    public String peek() {
+        if (eof()) {
+            return "";
+        }
+
+        if (eol()) {
+            line++;
+            pos = 0;
+            return "";
+        }
+
+        return String.valueOf(input.get(line).charAt(pos));
+    }
+
+    public String peekKeyword() {
+        StringBuilder result = new StringBuilder();
+
+        for (int i = pos; i < input.get(line).length(); i++) {
+            String str = String.valueOf(input.get(line).charAt(i));
+
+            if (ParserLib.isWhitespace.test(str)) {
+                break;
+            }
+
+            result.append(str);
+        }
+
+        return result.toString();
+    }
+
+    public void skipKeyword() {
+        pos += peekKeyword().length();
+    }
+
+    public void skipLine() {
+        pos = 0;
+        line += 1;
     }
 
     public boolean eof() {
-        return this.lines.size() == index;
+        return line >= this.input.size();
+    }
+
+    public boolean eol() {
+        return eof() || pos >= input.get(line).length();
     }
 }

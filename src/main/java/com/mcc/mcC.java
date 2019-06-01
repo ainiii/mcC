@@ -1,13 +1,21 @@
+import other.mcCGraph;
+import parser.Parser;
+
+import java.util.Arrays;
+
 public class mcC {
     public static void main(String[] args) {
-        if (args.length == 0) {
+        /*if (args.length == 0) {
             // error
             return;
         }
         
-        String fileName = args[0];
+        String fileName = args[0];*/
 
-        // parse file
-        // generate bytecode
+        Parser parser = new Parser("");
+        parser.parse(Arrays.asList("bool a = true", "int b = 1", "double c = 3.14 + 4.15 - 2", "string d = twoja stara", "print asdasd 1212"));
+
+        mcCGraph graph = new mcCGraph(parser.tree);
+        graph.draw();
     }
 }
