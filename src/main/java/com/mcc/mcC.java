@@ -13,7 +13,7 @@ public class mcC {
         String fileName = args[0];*/
 
         Parser parser = new Parser("");
-        parser.parse(Arrays.asList("bool a = true", "int b = 1", "double c = 3.14 + 4.15 - 2", "string d = twoja stara"));
+        parser.parse(Arrays.asList("bool a = true", "int b = 1", "double c = 3.14 + 4.15 - 2", "string d = twoja stara", "print asdasd 1212"));
 
         mcCGraph graph = new mcCGraph(parser.tree);
         graph.draw();

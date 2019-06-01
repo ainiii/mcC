@@ -16,15 +16,13 @@ public class ParserStream {
             return "";
         }
 
-        String str = String.valueOf(input.get(line).charAt(pos++));
-
         // next entry
         if (pos == input.get(line).length()) {
             line++;
             pos = 0;
         }
 
-        return str;
+        return String.valueOf(input.get(line).charAt(pos++));
     }
 
     public String peek() {

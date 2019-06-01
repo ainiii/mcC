@@ -58,6 +58,10 @@ public class Parser {
             return parseTypeDeclaration(stream);
         }
 
+        if (ParserLib.isFunction.test(nextKeyword)) {
+            return parseFunction(stream);
+        }
+
         return null;
     }
 
@@ -77,7 +81,7 @@ public class Parser {
         if (!token.equals("")) {
             AstNode astNode = mcCSyntax.getObjectFromField(token);
 
-            if (astNode == null || ParserLib.isInvalidOperator(astNode)) {
+            if (astNode == null) {
                 return null; // error
             }
 
@@ -146,7 +150,6 @@ public class Parser {
             case STRING:
                 ret = new DeclareStringNode();
                 ret.right = new ValueNode(ParserLib.readUntilEnd(stream));
-                stream.skipLine();
                 break;
             case BOOL:
                 ret = new DeclareBoolNode();
@@ -164,6 +167,31 @@ public class Parser {
         }
 
         ret.left = new ValueNode(variableName);
+        return ret;
+    }
+
+    private AstNode parseFunction(ParserStream stream) {
+        String nextKeyword = stream.peekKeyword();
+        stream.skipKeyword();
+        mcCSyntax.Syntax type = mcCSyntax.getEnumFromField(nextKeyword);
+
+        // error, should never happen
+        if (type == null) {
+            return null;
+        }
+
+        ParserLib.readWhitespace(stream);
+        AstNode ret;
+
+        switch (type) {
+            case PRINT:
+                ret = new FunctionPrintNode();
+                ret.right = new ValueNode(ParserLib.readUntilEnd(stream));
+                break;
+            default:
+                return null; // error, should never happen
+        }
+
         return ret;
     }
 }

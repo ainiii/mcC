@@ -1,6 +1,5 @@
 package parser;
 
-import ast.*;
 import other.mcCSyntax;
 
 import java.util.function.Predicate;
@@ -12,6 +11,7 @@ public class ParserLib {
     public static Predicate<String> isOperand = (str) -> mcCSyntax.getByType(mcCSyntax.EnumType.OPERATOR).indexOf(str) != -1;
     public static Predicate<String> isType = (str) -> mcCSyntax.getByType(mcCSyntax.EnumType.TYPE).indexOf(str) != -1;
     public static Predicate<String> isState = (str) -> mcCSyntax.getByType(mcCSyntax.EnumType.STATE).indexOf(str) != -1;
+    public static Predicate<String> isFunction = (str) -> mcCSyntax.getByType(mcCSyntax.EnumType.FUNCTION).indexOf(str) != -1;
     public static Predicate<String> isDigit = (str) -> str.matches("-?\\d+(\\.\\d+)?");
 
 
@@ -71,26 +71,25 @@ public class ParserLib {
     }
 
     public static String readUntilEnd(ParserStream stream) {
+        String current = stream.peek();
         StringBuilder str = new StringBuilder();
 
-        while (!stream.eol()) {
-            str.append(stream.next());
-        }
+        while (!current.equals("")) {
+            str.append(current);
+            stream.next();
 
-        stream.next();
+            if (stream.eol()) {
+                break;
+            }
+
+            current = stream.peek();
+        }
 
         return str.toString();
     }
 
     public static boolean isValid(String str) {
         return !str.equals("");
-    }
-
-    public static boolean isInvalidOperator(AstNode node) {
-        return node instanceof OperatorAssignNode ||
-                node instanceof OperatorEqualNode ||
-                node instanceof OperatorLessThanNode ||
-                node instanceof OperatorGreaterThanNode;
     }
 
     // add more helper methods

@@ -83,6 +83,9 @@ public class mcCSyntax {
         ASSIGN("=", OperatorAssignNode.class, EnumType.OPERATOR),
         EQUAL("==", OperatorEqualNode.class, EnumType.OPERATOR),
 
+        // functions
+        PRINT("print", FunctionPrintNode.class, EnumType.FUNCTION),
+
         // additional
         COMMENT("#", null, null);
 
@@ -100,6 +103,7 @@ public class mcCSyntax {
     public enum EnumType {
         OPERATOR,
         TYPE,
-        STATE
+        STATE,
+        FUNCTION
     }
 }

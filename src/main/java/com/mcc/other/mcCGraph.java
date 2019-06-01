@@ -1,7 +1,7 @@
 package other;
 
-import ast.RootNode;
 import ast.AstNode;
+import ast.RootNode;
 import ast.ValueNode;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.swing.mxGraphComponent;
