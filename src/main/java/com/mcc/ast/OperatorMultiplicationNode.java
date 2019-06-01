@@ -1,5 +1,5 @@
 package ast;
 
-public class OperatorMultiplicationNode implements OperatorNode {
+public class OperatorMultiplicationNode extends AstNode implements OperatorNode {
     public OperatorMultiplicationNode() { }
 }

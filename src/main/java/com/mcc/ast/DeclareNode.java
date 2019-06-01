@@ -1,5 +1,5 @@
 package ast;
 
-public interface DeclareNode extends AstNode {
+public interface DeclareNode {
 
 }

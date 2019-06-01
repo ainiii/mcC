@@ -1,5 +1,5 @@
 package ast;
 
-public class DeclareStringNode implements DeclareNode {
+public class DeclareStringNode extends AstNode implements DeclareNode {
     public DeclareStringNode() { }
 }

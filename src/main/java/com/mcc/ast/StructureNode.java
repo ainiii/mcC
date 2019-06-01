@@ -1,5 +1,5 @@
 package ast;
 
-public interface StructureNode extends AstNode {
+public interface StructureNode {
 
 }

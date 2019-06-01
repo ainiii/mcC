@@ -1,5 +1,5 @@
 package ast;
 
-public class StructureIfNode implements StructureNode {
+public class StructureIfNode extends AstNode implements StructureNode {
     public StructureIfNode() { }
 }
