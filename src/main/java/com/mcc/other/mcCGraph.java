@@ -1,3 +1,5 @@
+package other;
+
 import ast.RootNode;
 import ast.AstNode;
 import com.mxgraph.layout.mxCircleLayout;

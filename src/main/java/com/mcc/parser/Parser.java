@@ -10,29 +10,27 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Parser {
+    public RootNode tree = new RootNode();
     private String fileName;
-    private RootNode nodes = new RootNode();
 
     public Parser(String file) {
         this.fileName = file;
     }
 
     @Nullable
-    public RootNode parse() {
+    public void parse() {
         // parse line by line
         try {
             ParserStream stream = new ParserStream(Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8));
 
             // process each line and add to nodes list
             while (!stream.eof()) {
-                this.nodes.addNode(this.process(stream));
+                this.tree.addNode(this.process(stream));
             }
         } catch(IOException err) {
             // error
-            return null;
+            return;
         }
-
-        return this.nodes;
     }
 
     private AstNode process(ParserStream stream) {

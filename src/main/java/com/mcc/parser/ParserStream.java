@@ -3,31 +3,31 @@ package parser;
 import java.util.List;
 
 public class ParserStream {
-    private List<String> lines;
+    private List<String> input;
     private int pos = 0; // character in string
-    private int index = 0; // line number
+    private int line = 0; // line number
 
     public ParserStream(List<String> lines) {
-        this.lines = lines;
+        this.input = lines;
     }
 
-    public char next() {
-        char ch = lines.get(index).charAt(pos++);
+    public String next() {
+        String str = String.valueOf(input.get(line).charAt(pos++));
 
         // next entry
-        if (pos == lines.get(index).length()) {
-            index++;
+        if (pos == input.get(line).length()) {
+            line++;
             pos = 0;
         }
 
-        return ch;
+        return str;
     }
 
-    public char peek() {
-        return lines.get(index).charAt(pos);
+    public String peek() {
+        return String.valueOf(input.get(line).charAt(pos));
     }
 
     public boolean eof() {
-        return this.lines.size() == index;
+        return this.input.size() == line;
     }
 }
