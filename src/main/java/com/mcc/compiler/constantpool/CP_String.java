@@ -8,7 +8,7 @@ public class CP_String implements ICPEntry {
         u2 string_index;
     }*/
 
-    private short string_index;
+    public short string_index;
 
     public CP_String(short index) { this.string_index = index; }
 

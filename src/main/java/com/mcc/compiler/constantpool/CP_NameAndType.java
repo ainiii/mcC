@@ -9,8 +9,8 @@ public class CP_NameAndType implements ICPEntry {
         u2 descriptor_index;
     }*/
 
-    private short name_index;
-    private short descriptor_index;
+    public short name_index;
+    public short descriptor_index;
 
     public CP_NameAndType(short nameIndex, short descriptorIndex) {
         this.name_index = nameIndex;

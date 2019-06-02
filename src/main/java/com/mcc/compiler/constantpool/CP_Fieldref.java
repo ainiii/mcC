@@ -9,8 +9,8 @@ public class CP_Fieldref implements ICPEntry {
         u2 name_and_type_index;
     }*/
 
-    private short class_index;
-    private short name_and_type_index;
+    public short class_index;
+    public short name_and_type_index;
 
     public CP_Fieldref(short classIndex, short nameAndTypeIndex) {
         this.class_index = classIndex;

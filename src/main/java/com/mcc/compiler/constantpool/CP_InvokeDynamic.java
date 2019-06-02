@@ -9,8 +9,8 @@ public class CP_InvokeDynamic implements ICPEntry {
         u2 name_and_type_index;
     }*/
 
-    private short bootstrap_method_attr_index;
-    private short name_and_type_index;
+    public short bootstrap_method_attr_index;
+    public short name_and_type_index;
 
     public CP_InvokeDynamic(short bootstrapMethodAttrIndex, short nameAndTypeIndex) {
         this.bootstrap_method_attr_index = bootstrapMethodAttrIndex;

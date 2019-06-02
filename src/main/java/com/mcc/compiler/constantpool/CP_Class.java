@@ -8,7 +8,7 @@ public class CP_Class implements ICPEntry {
         u2 name_index;
     }*/
 
-    private short name_index;
+    public short name_index;
 
     public CP_Class(short index) {
         this.name_index = index;

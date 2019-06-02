@@ -10,7 +10,7 @@ public class CP_Double implements ICPEntry {
     }*/
     // two constant pool entries
 
-    private double bytes;
+    public double bytes;
 
     public CP_Double(double value) {
         this.bytes = value;

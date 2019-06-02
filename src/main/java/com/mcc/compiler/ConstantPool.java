@@ -1,5 +1,11 @@
 package compiler;
 
+import compiler.constantpool.*;
+
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
 public class ConstantPool {
     public static final byte CONSTANT_Utf8 = 1;
     public static final byte CONSTANT_Integer = 3;
@@ -16,5 +22,70 @@ public class ConstantPool {
     public static final byte CONSTANT_MethodType = 16;
     public static final byte CONSTANT_InvokeDynamic = 18;
 
-    private final int constantPoolSize = 1; // always starts at 1
+    private static int constantPoolLastIndex = 1;
+    public static ArrayList<CPEntry> constantPool;
+
+    public static void initPool() {
+        addClass(new CP_Utf8("mcC")); // main class name
+        addClass(new CP_Utf8("java/lang/Object"));
+        addClass(new CP_Utf8("java/lang/System"));
+        addClass(new CP_Utf8("java/io/PrintStream"));
+        addUtf8(new CP_Utf8("out"));
+        addUtf8(new CP_Utf8("Ljava/io/PrintStream"));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_NameAndType((short)findUtf8("out"), (short)findUtf8("Ljava/io/PrintStream"))));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_Fieldref((short)(findUtf8("java/lang/System") + 1), (short)(findUtf8("Ljava/io/PrintStream") + 1))));
+        addUtf8(new CP_Utf8("println"));
+        addUtf8(new CP_Utf8("(Ljava/lang/String;)V"));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_NameAndType((short)findUtf8("println"), (short)findUtf8("(Ljava/lang/String;)V"))));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_Methodref((short)(findUtf8("java/io/PrintStream") + 1), (short)(findUtf8("(Ljava/lang/String;)V") + 1))));
+        addUtf8(new CP_Utf8("()V"));
+        addUtf8(new CP_Utf8("([Ljava/lang/String;)V"));
+    }
+
+    public static int getNextIndex(int size) {
+        constantPoolLastIndex += size;
+
+        return constantPoolLastIndex - size;
+    }
+
+    public static void addInteger(CP_Integer entry) {
+        constantPool.add(new CPEntry(getNextIndex(1), entry));
+    }
+
+    public static void addDouble(CP_Double entry) {
+        constantPool.add(new CPEntry(getNextIndex(2), entry));
+    }
+
+    // booleans are 0 or 1 int, not in constant pool
+
+    public static void addString(CP_Utf8 entry) {
+        int utf8EntryIndex = getNextIndex(1);
+
+        constantPool.add(new CPEntry(utf8EntryIndex, entry));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_String((short)utf8EntryIndex)));
+    }
+
+    public static void addClass(CP_Utf8 entry) {
+        int utf8EntryIndex = getNextIndex(1);
+
+        constantPool.add(new CPEntry(utf8EntryIndex, entry));
+        constantPool.add(new CPEntry(getNextIndex(1), new CP_Class((short)utf8EntryIndex)));
+    }
+
+    public static void addUtf8(CP_Utf8 entry) {
+        constantPool.add(new CPEntry(getNextIndex(1), entry));
+    }
+
+    public static int findUtf8(String str) {
+        byte[] utf8Bytes = str.getBytes(StandardCharsets.UTF_8);
+        String bytes = DatatypeConverter.printHexBinary(utf8Bytes);
+
+        for (CPEntry v : constantPool) {
+            if (v.entry instanceof CP_Utf8 && ((CP_Utf8)v.entry).bytes.equals(bytes)) {
+                return v.index;
+            }
+        }
+
+        return -1;
+    }
 }
