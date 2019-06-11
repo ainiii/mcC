@@ -12,8 +12,8 @@ public class CP_Utf8 implements ICPEntry {
     u1 bytes[length];
     }*/
 
-    private short length;
-    private String bytes;
+    public short length;
+    public String bytes;
 
     public CP_Utf8(String utf8) {
         byte[] utf8Bytes = utf8.getBytes(StandardCharsets.UTF_8);

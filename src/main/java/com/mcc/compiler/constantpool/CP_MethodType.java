@@ -8,7 +8,7 @@ public class CP_MethodType implements ICPEntry {
         u2 descriptor_index;
     }*/
 
-    private short descriptor_index;
+    public short descriptor_index;
 
     public CP_MethodType(short descriptorIndex) { this.descriptor_index = descriptorIndex; }
 

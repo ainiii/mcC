@@ -8,7 +8,7 @@ public class CP_Integer implements ICPEntry {
         u4 bytes;
     }*/
 
-    private int bytes;
+    public int bytes;
 
     public CP_Integer(int value) { this.bytes = value; }
 

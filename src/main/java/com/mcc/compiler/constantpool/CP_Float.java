@@ -8,7 +8,7 @@ public class CP_Float implements ICPEntry {
         u4 bytes;
     }*/
 
-    private float bytes;
+    public float bytes;
 
     public CP_Float(float value) { this.bytes = value; }
 

@@ -9,8 +9,8 @@ public class CP_MethodHandle implements ICPEntry {
         u2 reference_index;
     }*/
 
-    private byte reference_kind;
-    private short reference_index;
+    public byte reference_kind;
+    public short reference_index;
 
     public CP_MethodHandle(byte referenceKind, short referenceIndex) {
         this.reference_kind = referenceKind;

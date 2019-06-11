@@ -10,7 +10,7 @@ public class CP_Long implements ICPEntry {
     }*/
     // two constant pool entries
 
-    private long bytes;
+    public long bytes;
 
     public CP_Long(long value) {
         this.bytes = value;
