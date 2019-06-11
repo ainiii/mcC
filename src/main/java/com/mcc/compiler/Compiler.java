@@ -67,8 +67,8 @@ public class Compiler {
         // constant pool skip
 
         headerBottom += "00 21"; // super public flags
-        headerBottom += String.format("%04x", ConstantPool.findUtf8("mcC") + 1); // this_class
-        headerBottom += String.format("%04x", ConstantPool.findUtf8("java/lang/Object") + 1); // super_class
+        headerBottom += String.format("%04x", ConstantPool.findUtf8("mcC") - 1); // this_class
+        headerBottom += String.format("%04x", ConstantPool.findUtf8("java/lang/Object") - 1); // super_class
         headerBottom += "00 00"; // interfaces
         headerBottom += "00 00"; // fields
         headerBottom += "00 01"; // methods
@@ -155,7 +155,7 @@ public class Compiler {
             ConstantPool.addString(new CP_Utf8(((ValueNode)node.right).value));
 
             result.add(new HexEntry(Opcode.GETSTATIC, String.format("%04x", ConstantPool.findUtf8("Ljava/io/PrintStream") + 2)));
-            result.add(new HexEntry(Opcode.LDC, String.format("%02x", ConstantPool.findUtf8(((ValueNode)node.right).value) + 1)));
+            result.add(new HexEntry(Opcode.LDC, String.format("%02x", ConstantPool.findUtf8(((ValueNode)node.right).value) - 1)));
             result.add(new HexEntry(Opcode.INVOKEVIRTUAL, String.format("%04x", ConstantPool.findUtf8("(Ljava/lang/String;)V") + 2)));
         }
 

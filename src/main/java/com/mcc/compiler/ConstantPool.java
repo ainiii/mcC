@@ -74,17 +74,17 @@ public class ConstantPool {
     // booleans are 0 or 1 int, not in constant pool
 
     public static void addString(CP_Utf8 entry) {
-        int utf8EntryIndex = getNextIndex(1);
+        int stringEntryIndex = getNextIndex(1);
 
-        constantPool.add(new CPEntry(utf8EntryIndex, entry));
-        constantPool.add(new CPEntry(getNextIndex(1), new CP_String((short)utf8EntryIndex)));
+        constantPool.add(new CPEntry(stringEntryIndex, new CP_String((short)(stringEntryIndex + 1))));
+        constantPool.add(new CPEntry(getNextIndex(1), entry));
     }
 
     public static void addClass(CP_Utf8 entry) {
-        int utf8EntryIndex = getNextIndex(1);
+        int classEntryIndex = getNextIndex(1);
 
-        constantPool.add(new CPEntry(utf8EntryIndex, entry));
-        constantPool.add(new CPEntry(getNextIndex(1), new CP_Class((short)utf8EntryIndex)));
+        constantPool.add(new CPEntry(classEntryIndex, new CP_Class((short)(classEntryIndex + 1))));
+        constantPool.add(new CPEntry(getNextIndex(1), entry));
     }
 
     public static void addUtf8(CP_Utf8 entry) {
