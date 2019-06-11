@@ -4,8 +4,8 @@ import java.util.List;
 
 public class ParserStream {
     private List<String> input;
-    private static int pos = 0; // character in string
-    private static int line = 0; // line number
+    private int pos = 0; // character in string
+    private int line = 0; // line number
 
     public ParserStream(List<String> lines) {
         this.input = lines;

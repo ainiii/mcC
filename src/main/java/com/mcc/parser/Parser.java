@@ -9,13 +9,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 public class Parser {
-    public RootNode tree = new RootNode();
+    public RootNode tree;
     private String fileName;
 
     public Parser(String file) {
         this.fileName = file;
+        this.tree = new RootNode();
     }
 
     public List<String> readFile() {
@@ -36,6 +38,8 @@ public class Parser {
         while (!stream.eof()) {
             this.tree.addNode(this.process(stream));
         }
+
+        this.tree.nodes.removeIf(Objects::isNull);
     }
 
     private AstNode process(ParserStream stream) {
