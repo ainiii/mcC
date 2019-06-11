@@ -228,7 +228,7 @@ public enum Opcode {
     IMPDEP1(0xfe),
     IMPDEP2(0xff);
 
-    private final int hex;
+    public final int hex;
 
     Opcode(int hex) {
         this.hex = hex;

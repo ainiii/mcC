@@ -23,7 +23,7 @@ public class ConstantPool {
     public static final byte CONSTANT_InvokeDynamic = 18;
 
     private static int constantPoolLastIndex = 1;
-    public static ArrayList<CPEntry> constantPool;
+    public static ArrayList<CPEntry> constantPool = new ArrayList<>();
 
     public static void initPool() {
         addClass(new CP_Utf8("mcC")); // main class name
@@ -38,8 +38,23 @@ public class ConstantPool {
         addUtf8(new CP_Utf8("(Ljava/lang/String;)V"));
         constantPool.add(new CPEntry(getNextIndex(1), new CP_NameAndType((short)findUtf8("println"), (short)findUtf8("(Ljava/lang/String;)V"))));
         constantPool.add(new CPEntry(getNextIndex(1), new CP_Methodref((short)(findUtf8("java/io/PrintStream") + 1), (short)(findUtf8("(Ljava/lang/String;)V") + 1))));
-        addUtf8(new CP_Utf8("()V"));
+        addUtf8(new CP_Utf8("main"));
         addUtf8(new CP_Utf8("([Ljava/lang/String;)V"));
+        addUtf8(new CP_Utf8("Code"));
+    }
+
+    public static String getPool() {
+        StringBuilder result = new StringBuilder();
+
+        for (CPEntry e : constantPool) {
+            result.append(e.entry.get());
+        }
+
+        return result.toString();
+    }
+
+    public static String getPoolSize() {
+        return String.format("%04x", constantPoolLastIndex);
     }
 
     public static int getNextIndex(int size) {
