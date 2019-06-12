@@ -10,7 +10,7 @@ Note: Make sure to install Apache Maven.
 
 Go to /target/ directory, compile your code file:
 
-    java -jar output.jar FILE_TO_COMPILE_NAME DRAW_GRAPH
+    java -jar OUTPUT_JAR_NAME.jar FILE_TO_COMPILE_NAME DRAW_GRAPH
 
 If everything went good, run:
 

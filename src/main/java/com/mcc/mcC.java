@@ -6,7 +6,6 @@ import parser.Parser;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
 
 public class mcC {
     public static void main(String[] args) {
@@ -31,8 +30,11 @@ public class mcC {
         String result = compiler.compile(parser.tree);
 
         result = result.replaceAll("\\s+", ""); // remove whitespaces
+        result = result.replaceAll("(.{32})", "$1\n"); // insert new lines
         result = result.replaceAll("(.{4})", "$1 "); // insert spaces
+        result = result.replaceAll("[\\n\\s]+\\n", "\n"); // remove spaces after new lines
         result = result.toLowerCase();
+        result = result.trim();
 
         try {
             Files.write(Paths.get("./out.class"), result.getBytes(StandardCharsets.UTF_8));
