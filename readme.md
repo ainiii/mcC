@@ -16,4 +16,4 @@ If everything went good, run:
 
     java out.class
 
-to check your compiler code.
+to check your compiled code.
